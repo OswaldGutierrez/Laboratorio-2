@@ -56,6 +56,7 @@
             buttonCalcular.TabIndex = 2;
             buttonCalcular.Text = "button1";
             buttonCalcular.UseVisualStyleBackColor = true;
+            buttonCalcular.Click += buttonCalcular_Click;
             // 
             // labelInterseccion
             // 
