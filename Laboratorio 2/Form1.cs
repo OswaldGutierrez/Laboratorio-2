@@ -47,7 +47,7 @@ namespace Laboratorio_2
                     return $"Las rectas se cruzan en el punto ({xInterseccion}, {yInterseccion}).";
                 }
                 // Verificar si son paralelas
-                else if (Math.Abs(b1 - b2) < double.Epsilon)
+                else if (m1 == m2)
                 {
                     return "Las rectas son paralelas.";
                 }
