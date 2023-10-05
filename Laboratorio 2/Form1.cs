@@ -25,7 +25,8 @@ namespace Laboratorio_2
         private string AnalizarRectasDesdeEcuaciones(string ecuacion1, string ecuacion2)
         {// Expresión regular para extraer la pendiente y el término independiente de una ecuación en el formato "y = mx + b",
          // permitiendo números decimales en la pendiente y el término independiente.
-            string patron = @"y\s*=\s*(-?\d+(\.\d+)?)x\s*([\+\-]\s*\d+(\.\d+)?)?";
+            string patron = @"y\s*=\s*(-?\d+(\,\d+)?)x\s*([\+\-]\s*\d+(\,\d+)?)?";
+
 
             Match match1 = Regex.Match(ecuacion1, patron);
             Match match2 = Regex.Match(ecuacion2, patron);
