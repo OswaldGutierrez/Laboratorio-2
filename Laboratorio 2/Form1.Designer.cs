@@ -62,6 +62,8 @@
             buttonCalcular.Text = "Calcular";
             buttonCalcular.UseVisualStyleBackColor = true;
             buttonCalcular.Click += buttonCalcular_Click;
+            buttonCalcular.MouseLeave += buttonCalcular_MouseLeave;
+            buttonCalcular.MouseHover += buttonCalcular_MouseHover;
             // 
             // labelInterseccion
             // 
