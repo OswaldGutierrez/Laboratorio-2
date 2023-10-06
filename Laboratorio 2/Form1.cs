@@ -120,78 +120,128 @@ namespace Laboratorio_2
         }
 
 
-
+        // Logica para la notación punto intercepto.
 
         private void buttonCalcular2_Click(object sender, EventArgs e)
         {
-            // Obtener las ecuaciones ingresadas en los cuadros de texto
             string ecuacion1 = textBoxFuncion3.Text;
             string ecuacion2 = textBoxFuncion4.Text;
 
-            // Analizar las ecuaciones para extraer los valores de y1, m, x1
-            double y1_1, m1_1, x1_1, y1_2, m1_2, x1_2;
+            // Llamar a la función para calcular el punto de intersección y verificar perpendicularidad/paralelismo
+            calcularInterseccion(ecuacion1, ecuacion2);
+        }
 
-            if (parseEcuacion(ecuacion1, out y1_1, out m1_1, out x1_1) &&
-                parseEcuacion(ecuacion2, out y1_2, out m1_2, out x1_2))
+        private void calcularInterseccion(string ecuacion1, string ecuacion2)
+        {
+            // Analizar las ecuaciones para extraer los valores y1, m y x1
+            double y1 = 0.0;
+            double m = 0.0;
+            double x1 = 0.0;
+
+            // Analizar ecuacion1
+            analizarEcuacion(ecuacion1, out y1, out m, out x1);
+
+            // Analizar ecuacion2
+            double y2 = 0.0;
+            double m2 = 0.0;
+            double x2 = 0.0;
+
+            analizarEcuacion(ecuacion2, out y2, out m2, out x2);
+
+            // Calcular el punto de intersección
+            double interseccionX = (y2 - y1) / (m - m2);
+            double interseccionY = m * interseccionX + y1;
+
+            // Verificar si las rectas son perpendiculares o paralelas
+            bool sonPerpendiculares = (m * m2 == -1);
+            bool sonParalelas = (m == m2);
+
+            // Mostrar resultados
+            MessageBox.Show($"Punto de intersección: ({interseccionX}, {interseccionY})\n" +
+                            $"Son perpendiculares: {sonPerpendiculares}\n" +
+                            $"Son paralelas: {sonParalelas}");
+        }
+
+        private void analizarEcuacion(string ecuacion, out double y1, out double m, out double x1)
+        {
+            // Inicializar valores predeterminados
+            y1 = 0.0;
+            m = 1.0;  // Valor predeterminado positivo
+            x1 = 0.0;
+
+            // Eliminar espacios en blanco y caracteres no deseados
+            ecuacion = ecuacion.Replace(" ", "").Replace("y=", "").Replace("y-", "").Replace("y+", "");
+
+            // Separar la ecuación en sus partes
+            string[] partes = ecuacion.Split('=');
+
+            if (partes.Length == 2)
             {
-                // Calcular el valor de x donde las dos ecuaciones se intersectan
-                if (m1_1 != m1_2)
-                {
-                    double x = (y1_2 - y1_1) / (m1_1 - m1_2);
-                    double y = m1_1 * (x - x1_1) + y1_1;
+                string ladoIzquierdo = partes[0];
+                string ladoDerecho = partes[1];
 
-                    // Mostrar el resultado en otro cuadro de texto o en una etiqueta
-                    // Por ejemplo, si tienes un cuadro de texto llamado textBoxResultado:
-                    MessageBox.Show ($"Punto de intersección: ({x}, {y})");
+                // Analizar el lado izquierdo de la ecuación
+                if (ladoIzquierdo.Contains("x"))
+                {
+                    string[] izquierdoPartes = ladoIzquierdo.Split('x');
+                    if (izquierdoPartes.Length == 2)
+                    {
+                        if (double.TryParse(izquierdoPartes[0], out y1))
+                        {
+                            if (izquierdoPartes[1].StartsWith("+"))
+                            {
+                                izquierdoPartes[1] = izquierdoPartes[1].Substring(1);
+                            }
+                            if (izquierdoPartes[1].StartsWith("-"))
+                            {
+                                izquierdoPartes[1] = "-" + izquierdoPartes[1].Substring(1);
+                            }
+                            if (double.TryParse(izquierdoPartes[1], out x1))
+                            {
+                                // Éxito al analizar el lado izquierdo
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Las ecuaciones son paralelas y no se intersectan.");
+                    if (double.TryParse(ladoIzquierdo, out y1))
+                    {
+                        // Éxito al analizar el lado izquierdo
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, ingresa ecuaciones válidas en los cuadros de texto.");
-            }
-        }
 
-        private bool parseEcuacion(string ecuacion, out double y1, out double m, out double x1)
-        {
-            y1 = m = x1 = 0;
-
-            try
-            {
-                // Dividir la ecuación en partes usando los operadores '+' y '='
-                string[] partes = ecuacion.Split(new[] { '=', '+' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (partes.Length == 2)
+                // Analizar el lado derecho de la ecuación
+                if (ladoDerecho.Contains("x"))
                 {
-                    // Analizar la parte izquierda de la ecuación
-                    string[] izquierda = partes[0].Split(new[] { '-', 'y', '=' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (izquierda.Length == 2)
+                    string[] derechoPartes = ladoDerecho.Split('x');
+                    if (derechoPartes.Length == 2)
                     {
-                        // Extraer los valores de y1 y m
-                        y1 = double.Parse(izquierda[0]);
-                        m = double.Parse(izquierda[1]);
+                        if (double.TryParse(derechoPartes[0], out m))
+                        {
+                            if (derechoPartes[1].StartsWith("+"))
+                            {
+                                derechoPartes[1] = derechoPartes[1].Substring(1);
+                            }
+                            if (derechoPartes[1].StartsWith("-"))
+                            {
+                                derechoPartes[1] = "-" + derechoPartes[1].Substring(1);
+                            }
+                            if (double.TryParse(derechoPartes[1], out x1))
+                            {
+                                // Éxito al analizar el lado derecho
+                            }
+                        }
                     }
-
-                    // Analizar la parte derecha de la ecuación
-                    string[] derecha = partes[1].Split(new[] { '(', '-', 'x', ')' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (derecha.Length == 2)
+                }
+                else
+                {
+                    if (double.TryParse(ladoDerecho, out m))
                     {
-                        // Extraer el valor de x1
-                        x1 = double.Parse(derecha[1]);
+                        // Éxito al analizar el lado derecho
                     }
-
-                    return true;
                 }
             }
-            catch (Exception)
-            {
-                // Si hay un error al analizar la ecuación, se considera inválida.
-            }
-
-            return false;
         }
     }
 }
