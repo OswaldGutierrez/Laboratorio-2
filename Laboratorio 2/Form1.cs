@@ -8,6 +8,8 @@ namespace Laboratorio_2
         public Form1()
         {
             InitializeComponent();
+
+            radioButton1.Checked = true;
         }
 
         // Esta función se ejecutará cuando demos click en el botón 'Calcular' de la interfaz.
@@ -95,6 +97,27 @@ namespace Laboratorio_2
         private void buttonCalcular_MouseLeave(object sender, EventArgs e)
         {
             buttonCalcular.BackColor = Color.Transparent;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+        // Habilitamos o inhabilitamos qué panel está activado.
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                panel1.Enabled = true;
+                panel2.Enabled = false;
+            }
+            else
+            {
+                panel1.Enabled = false;
+                panel2.Enabled = true;
+            }
         }
     }
 }
