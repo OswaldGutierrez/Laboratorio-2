@@ -20,13 +20,13 @@ namespace Laboratorio_2
             string ecuacion2 = textBoxFuncion2.Text;
 
             // Llamar a la función AnalizarRectasDesdeEcuaciones con las ecuaciones ingresadas
-            string resultado = analizarRectasDesdeEcuaciones(ecuacion1, ecuacion2);
+            string resultado = analizarRectasPendienteIntercepto(ecuacion1, ecuacion2);
 
             // Mostrar el resultado en un MessageBox
             MessageBox.Show(resultado);
         }
 
-        private string analizarRectasDesdeEcuaciones(string ecuacion1, string ecuacion2)
+        private string analizarRectasPendienteIntercepto(string ecuacion1, string ecuacion2)
         {
             /**
              * Expresión regular para extraer la pendiente y el término independiente de una ecuación en el formato "y = mx + b",
@@ -36,7 +36,7 @@ namespace Laboratorio_2
             string patron = @"y\s*=\s*(-?\d+(\,\d+)?)x\s*([\+\-]\s*\d+(\,\d+)?)?$";
 
 
-
+            // Almacenamos el patró específico en las variables match1 y match2
             Match match1 = Regex.Match(ecuacion1, patron);
             Match match2 = Regex.Match(ecuacion2, patron);
 
@@ -104,7 +104,6 @@ namespace Laboratorio_2
 
         }
 
-
         // Habilitamos o inhabilitamos qué panel está activado.
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
@@ -118,6 +117,81 @@ namespace Laboratorio_2
                 panel1.Enabled = false;
                 panel2.Enabled = true;
             }
+        }
+
+
+
+
+        private void buttonCalcular2_Click(object sender, EventArgs e)
+        {
+            // Obtener las ecuaciones ingresadas en los cuadros de texto
+            string ecuacion1 = textBoxFuncion3.Text;
+            string ecuacion2 = textBoxFuncion4.Text;
+
+            // Analizar las ecuaciones para extraer los valores de y1, m, x1
+            double y1_1, m1_1, x1_1, y1_2, m1_2, x1_2;
+
+            if (parseEcuacion(ecuacion1, out y1_1, out m1_1, out x1_1) &&
+                parseEcuacion(ecuacion2, out y1_2, out m1_2, out x1_2))
+            {
+                // Calcular el valor de x donde las dos ecuaciones se intersectan
+                if (m1_1 != m1_2)
+                {
+                    double x = (y1_2 - y1_1) / (m1_1 - m1_2);
+                    double y = m1_1 * (x - x1_1) + y1_1;
+
+                    // Mostrar el resultado en otro cuadro de texto o en una etiqueta
+                    // Por ejemplo, si tienes un cuadro de texto llamado textBoxResultado:
+                    MessageBox.Show ($"Punto de intersección: ({x}, {y})");
+                }
+                else
+                {
+                    MessageBox.Show("Las ecuaciones son paralelas y no se intersectan.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, ingresa ecuaciones válidas en los cuadros de texto.");
+            }
+        }
+
+        private bool parseEcuacion(string ecuacion, out double y1, out double m, out double x1)
+        {
+            y1 = m = x1 = 0;
+
+            try
+            {
+                // Dividir la ecuación en partes usando los operadores '+' y '='
+                string[] partes = ecuacion.Split(new[] { '=', '+' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (partes.Length == 2)
+                {
+                    // Analizar la parte izquierda de la ecuación
+                    string[] izquierda = partes[0].Split(new[] { '-', 'y', '=' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (izquierda.Length == 2)
+                    {
+                        // Extraer los valores de y1 y m
+                        y1 = double.Parse(izquierda[0]);
+                        m = double.Parse(izquierda[1]);
+                    }
+
+                    // Analizar la parte derecha de la ecuación
+                    string[] derecha = partes[1].Split(new[] { '(', '-', 'x', ')' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (derecha.Length == 2)
+                    {
+                        // Extraer el valor de x1
+                        x1 = double.Parse(derecha[1]);
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                // Si hay un error al analizar la ecuación, se considera inválida.
+            }
+
+            return false;
         }
     }
 }

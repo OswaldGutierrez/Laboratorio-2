@@ -201,6 +201,7 @@
             buttonCalcular2.TabIndex = 2;
             buttonCalcular2.Text = "Calcular";
             buttonCalcular2.UseVisualStyleBackColor = true;
+            buttonCalcular2.Click += buttonCalcular2_Click;
             // 
             // textBoxFuncion3
             // 
