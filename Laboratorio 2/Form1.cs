@@ -46,7 +46,7 @@ namespace Laboratorio_2
                 {
                     double xInterseccion = (b2 - b1) / (m1 - m2);
                     double yInterseccion = m1 * xInterseccion + b1;
-                    
+
 
                     // Verificar si son perpendiculares
                     if (Math.Abs(m1 * m2 + 1.0) < double.Epsilon)
@@ -58,16 +58,13 @@ namespace Laboratorio_2
                     {
                         return $"Las rectas se cruzan en el punto ({xInterseccion}, {yInterseccion}).";
                     }
-                
+
                 }
 
                 else
                 {
                     return "Las rectas son paralelas";
                 }
-                
-
-
 
 
             }
