@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using System.Text.RegularExpressions;
 
 namespace Laboratorio_2
@@ -45,22 +46,30 @@ namespace Laboratorio_2
                 {
                     double xInterseccion = (b2 - b1) / (m1 - m2);
                     double yInterseccion = m1 * xInterseccion + b1;
-                    return $"Las rectas se cruzan en el punto ({xInterseccion}, {yInterseccion}).";
+                    
+
+                    // Verificar si son perpendiculares
+                    if (Math.Abs(m1 * m2 + 1.0) < double.Epsilon)
+                    {
+                        return $"Las rectas son perpendiculares y se cruzan en el punto ({xInterseccion}, {yInterseccion}).";
+                    }
+
+                    else
+                    {
+                        return $"Las rectas se cruzan en el punto ({xInterseccion}, {yInterseccion}).";
+                    }
+                
                 }
-                // Verificar si son paralelas
-                else if (m1 == m2)
-                {
-                    return "Las rectas son paralelas.";
-                }
-                // Verificar si son perpendiculares
-                else if (Math.Abs(m1 * m2 + 1.0) < double.Epsilon)
-                {
-                    return "Las rectas son perpendiculares.";
-                }
+
                 else
                 {
-                    return "Las rectas no son paralelas ni perpendiculares y no se cruzan.";
+                    return "Las rectas son paralelas";
                 }
+                
+
+
+
+
             }
             else
             {
